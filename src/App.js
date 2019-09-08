@@ -1,6 +1,5 @@
 import React from 'react';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
@@ -9,10 +8,6 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import './App.css';
-
-const app = new Clarifai.App({
-  apiKey: 'bbadd68d483841349bd50d71843e816c'
-});
 
 const particlesOptions = {
   particles: {
@@ -130,7 +125,7 @@ class App extends React.Component {
       this.setState({ isSignedIn: true });
     }
 
-    this.setState({ route: route });
+    this.setState({ route });
 
   }
 
@@ -154,7 +149,7 @@ class App extends React.Component {
             <FaceRecognition box={box} imageUrl={imageUrl} />
           </div>
           : (
-            route === 'signin'
+            route === 'signin' || route === 'signout'
               ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
               : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
           )
