@@ -92,22 +92,28 @@ class App extends React.Component {
   }
 
   onButtonSubmit = () => {
-    const { input } = this.state;
-    this.setState({ imageUrl: input })
-
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, input)
+    const { input, user } = this.state;
+    this.setState({ imageUrl: input });
+    fetch('http://localhost:3005/imageurl', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input
+      })
+    })
+      .then(response => response.json())
       .then(response => {
         if (response) {
           fetch('http://localhost:3005/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              id: this.state.user.id
+              id: user.id
             })
           })
             .then(response => response.json())
             .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count }))
+              this.setState(Object.assign(user, { entries: count }))
             })
             .catch(console.log)
         }
@@ -147,7 +153,6 @@ class App extends React.Component {
             />
             <FaceRecognition box={box} imageUrl={imageUrl} />
           </div>
-
           : (
             route === 'signin'
               ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
